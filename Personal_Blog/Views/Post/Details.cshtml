@@ -1,0 +1,46 @@
+﻿@model Personal_Blog.Models.Schema.Post
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="container mt-4">
+    <h1>@Model.Title</h1>
+    <p><em>Posted on @Model.CreatedAt?.ToString("MMMM dd, yyyy") by @Model.Author?.UserName</em></p>
+    <div class="content mt-3">
+        <p>@Model.Content</p>
+    </div>
+
+    <hr />
+
+    <h3>Comments</h3>
+    @if (Model.Comments != null && Model.Comments.Any())
+    {
+        <div class="list-group">
+            @foreach (var comment in Model.Comments)
+            {
+                <div class="list-group-item">
+                    <h5>@comment.Commenter?.UserName</h5>
+                    <p>@comment.Content</p>
+                    <small class="text-muted">@comment.CreatedAt?.ToString("MMMM dd, yyyy")</small>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p>No comments yet. Be the first to comment!</p>
+    }
+
+    <hr />
+
+    <h3>Add a Comment</h3>
+    <form asp-action="AddComment" method="post">
+        <div class="form-group">
+            <label for="content">Comment:</label>
+            <textarea class="form-control" id="content" name="Content" required></textarea>
+        </div>
+        <input type="hidden" name="PostId" value="@Model.Id" />
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
